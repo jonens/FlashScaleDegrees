@@ -1,0 +1,46 @@
+canvas.c_cell
+{
+	
+	padding: 2px 2px;
+	border: 1px solid #3e3;
+}
+div.d_cell
+{
+	position: absolute;
+	
+	padding: 2px 2px;
+	border: 2px solid #f22;
+}
+div.row
+{
+	position: relative;
+}
+.hide
+{
+	display: none;
+}
+.row1
+{
+	top: 15px;
+}
+.row2
+{
+	top: 150px;
+}
+.row3
+{
+	top: 285px;
+}
+.col1
+{
+	left: 0px;
+}
+.col2
+{
+	left: 225px;
+}
+.col3
+{
+	left: 450px;
+}
+

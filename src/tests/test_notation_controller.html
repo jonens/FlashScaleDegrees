@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Test NotationController for Scale Degrees and Intervals</title>
+		<link rel="stylesheet" type="text/css" href="test_notation.css" />
+		<script src="../../../Modernizr/modernizr.custom.18580.js"></script>
+		<script src="../../../Raphael/raphael_min.js"></script>
+		<!-- VexFlow Compiled Source -->
+		<!--<script src="../VexFlowMod/vexflow_mod_min.js"></script>-->
+		
+		<!-- VexFlow Uncompiled Sources -->		
+		<script src="../../../VexFlowMod/header.js"></script>
+		<script src="../../../VexFlowMod/vex.js"></script>
+		<script src="../../../VexFlowMod/flow.js"></script>
+		<script src="../../../VexFlowMod/tables.js"></script>
+		<script src="../../../VexFlowMod/fonts/vexflow_font.js"></script>
+		<script src="../../../VexFlowMod/glyph.js"></script>
+		<script src="../../../VexFlowMod/stave.js"></script>
+		<script src="../../../VexFlowMod/staveconnector.js"></script>
+		<script src="../../../VexFlowMod/tabstave.js"></script>
+		<script src="../../../VexFlowMod/tickcontext.js"></script>
+		<script src="../../../VexFlowMod/tickable.js"></script>
+		<script src="../../../VexFlowMod/note.js"></script>
+		<script src="../../../VexFlowMod/barnote.js"></script>
+		<script src="../../../VexFlowMod/ghostnote.js"></script>
+		<script src="../../../VexFlowMod/stavenote.js"></script>		
+		<script src="../../../VexFlowMod/tabnote.js"></script>
+		<script src="../../../VexFlowMod/beam.js"></script>
+		<script src="../../../VexFlowMod/voice.js"></script>
+		<script src="../../../VexFlowMod/modifier.js"></script>
+		<script src="../../../VexFlowMod/modifiercontext.js"></script>
+		<script src="../../../VexFlowMod/accidental.js"></script>
+		<script src="../../../VexFlowMod/dot.js"></script>
+		<script src="../../../VexFlowMod/formatter.js"></script>
+		<script src="../../../VexFlowMod/stavetie.js"></script>
+		<script src="../../../VexFlowMod/tabtie.js"></script>
+		<script src="../../../VexFlowMod/tabslide.js"></script>
+		<script src="../../../VexFlowMod/bend.js"></script>
+		<script src="../../../VexFlowMod/vibrato.js"></script>
+		<script src="../../../VexFlowMod/annotation.js"></script>
+		<script src="../../../VexFlowMod/tuning.js"></script>
+		<script src="../../../VexFlowMod/stavemodifier.js"></script>
+		<script src="../../../VexFlowMod/stavebarline.js"></script>
+		<script src="../../../VexFlowMod/keysignature.js"></script>
+		<script src="../../../VexFlowMod/timesignature.js"></script>
+		<script src="../../../VexFlowMod/clef.js"></script>
+		<script src="../../../VexFlowMod/music.js"></script>
+		<script src="../../../VexFlowMod/keymanager.js"></script>
+		<script src="../../../VexFlowMod/renderer.js"></script>
+		<script src="../../../VexFlowMod/raphaelcontext.js"></script>
+		
+		<script src="../../../JQuery/jquery-1.6.2.min.js"></script>
+		<script src="../../../JQuery/jquery-ui-drag_drop.min.js"></script>
+		
+		<script src="../../../games.js"></script>
+		<script src="../../../Notation/notation.js"></script>
+		<script src="../../../Notation/notationcontroller.js"></script>
+		<script src="../../../Notation/notationmodel.js"></script>
+		<script src="../../../Notation/config.js"></script>
+		<script src="../../../Notation/notation_tables.js"></script>
+		<script>
+			var show_canvas;
+			if (Modernizr.canvas) {
+				show_canvas = true;
+				var row_one_selector = "#row_one canvas";
+				var row_two_selector = "#row_two canvas";
+				var row_three_selector = "#row_three canvas";
+			}
+			if (!Modernizr.canvas) {
+				show_canvas = false;
+				var row_one_selector = "#row_one div";
+				var row_two_selector = "#row_two div";
+				var row_three_selector = "#row_three div";	
+			}
+		</script>
+	</head>
+	<body>
+		<!-- test drawStaff function -->
+		<div id="row_one" class="row">			
+			<canvas class="c_cell" id="canvas_a"></canvas>
+			<canvas class="c_cell" id="canvas_b"></canvas>
+			<canvas class="c_cell" id="canvas_c"></canvas>
+			<div class="d_cell row1 col1" id="div_a"></div>
+			<div class="d_cell row1 col2" id="div_b"></div>
+			<div class="d_cell row1 col3" id="div_c"></div>
+		</div>
+		<div id="row_two" class="row">			
+			<canvas class="c_cell" id="canvas_d"></canvas>
+			<canvas class="c_cell" id="canvas_e"></canvas>
+			<canvas class="c_cell" id="canvas_f"></canvas>
+			<div class="d_cell row2 col1" id="div_d"></div>
+			<div class="d_cell row2 col2" id="div_e"></div>
+			<div class="d_cell row2 col3" id="div_f"></div>
+		</div>
+		<div id="row_three" class="row">			
+			<canvas class="c_cell" id="canvas_g"></canvas>
+			<canvas class="c_cell" id="canvas_h"></canvas>
+			<canvas class="c_cell" id="canvas_i"></canvas>
+			<div class="d_cell row3 col1" id="div_g"></div>
+			<div class="d_cell row3 col2" id="div_h"></div>
+			<div class="d_cell row3 col3" id="div_i"></div>
+		</div>
+		<script>
+			//set up variables
+			var clefs = ["treble", "bass", "alto", "tenor"],
+				keys = ["C", "G", "F", "D", "Bb", "A", "Eb", "E", "Ab", "B", "Db",
+							"F#", "Gb", "C#", "Cb"],
+				staves = [],
+				shuffled_keys = [],
+				length = keys.length,
+				nc = new Games.Notation.NotationController(),
+				cfg = new Games.Notation.Config(),
+				i, j, canvas_id,				
+				scale = 1.3,
+				x = 10,
+				y = -10,
+				width = 200,
+				note_name_t = "A#/4",
+				note_name_b = "BB/2",
+				note_name_a = "G/3",
+				note_dur = "w",
+				time_sig = Vex.Flow.TIME4_4,
+				noteSpecs = {0: {"note_names" : ["C/3", "E/3", "G/3"], 
+								 "note_dur" : "h"},
+							 1: {"note_names" : ["C/3", "E/3"], 
+								 "note_dur" : "q"},
+							 2: {"note_names" : ["D/4", "F/4", "B/4"], 
+								 "note_dur" : "q"},
+							"length": 3
+										
+				};
+			//shuffle the key signatures (Fisher–Yates shuffle, inside-out)
+			//To initialize an array a of n elements to a randomly shuffled copy of //source, both 0-based:
+			/*
+			  a[0] <-- source[0]
+			  for i from 1 to n - 1 do
+				  j <-- random integer with 0 <= j <= i
+				  a[i] <-- a[j]
+				  a[j] <-- source[i]
+			*/
+			shuffled_keys[0] = keys[0];
+			for (i = 1; i < length; i++) {
+				j = Math.round(Math.random() * 100) % (i + 1);
+				shuffled_keys[i] = shuffled_keys[j];
+				shuffled_keys[j] = keys[i];			
+			}
+			//select correct display cells
+			if (show_canvas) {
+				$('.d_cell').addClass("hide");
+				$('.c_cell').removeClass("hide");
+			}
+			else {
+				$('.d_cell').removeClass("hide");
+				$('.c_cell').addClass("hide");
+			}
+			for (i = 0; i< 3; i++) {
+				canvas_id = $(row_one_selector)[i].id;
+				staves[i] = nc.drawStaff(canvas_id, x, y, width, scale);
+				nc.drawClef(canvas_id, staves[i], "treble");
+				nc.drawKeySignature(canvas_id, staves[i], shuffled_keys[i]);
+				nc.drawNote(canvas_id, staves[i], note_name_t, note_dur, time_sig, 100);				
+				canvas_id = $(row_two_selector)[i].id;
+				staves[i + 3] = nc.drawStaff(canvas_id, x, y, width, scale);
+				nc.drawClef(canvas_id, staves[i + 3], "bass");
+				nc.drawKeySignature(canvas_id, staves[i + 3], shuffled_keys[i + 3]);
+				nc.drawNote(canvas_id, staves[i + 3], note_name_b, note_dur, time_sig, 100, "#");
+				canvas_id = $(row_three_selector)[i].id;
+				staves[i + 6] = nc.drawStaff(canvas_id, x, y, width, scale);				
+				nc.drawClef(canvas_id, staves[i + 6], "alto");
+				nc.drawKeySignature(canvas_id, staves[i + 6], shuffled_keys[i + 6])
+				nc.drawNotes(canvas_id, staves[i + 6], noteSpecs, time_sig, 100);
+			}
+		</script>		
+		
+	</body>
+</html>
+		

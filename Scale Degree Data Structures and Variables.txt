@@ -1,0 +1,83 @@
+Flash Scale Degrees (Major) Game Logic
+
+1.  Implementing StatusModel.getKeySpec()
+
+	a. Similar to Flash Key Signature
+	
+		1) Multiple tiers, based on the level
+		
+			a) Tier 1: Start with C Major only - treble and bass clef (clef can be chosen randomly)
+				(1) - no ledger lines
+				(2) - one ledger line
+			b) Tier 2: Expand to G and F Major - treble/bass clef
+				(1) - no ledger lines
+				(2) - one ledger line
+			c) Tier 3: Expand to D and Bb major - t/c
+				(1) - no ledger lines
+				(2) - one ledger line
+			d) Tier 4: Expand to A, E, Eb, Ab major - t/c
+				(1) - no ledger lines
+				(2) - one ledger line
+			e) Tier 5: Expand to B, Db major - t/c
+				(1) - no ledger lines
+				(2) - one ledger line
+			f) Tier 6: Expand to F#, C#, Gb, C# major - t/c
+				(1) - no ledger lines
+				(2) - one ledger line
+			g) Tier 7: Reduce to C, G, F major - alto
+				(1) - no ledger lines
+				(2) - one ledger line
+			h) Tier 8: Reduce to C, G, F major - tenor
+				(1) - no ledger lines
+				(2) - one ledger line
+			i) Tier 9: Expand to D, A, E, Bb, Eb, Ab - alto
+				(1) - no ledger lines
+				(2) - one ledger line
+			j) Tier 10: Expand to D, A, E, Bb, Eb, Ab - tenor
+				(1) - no ledger lines
+				(2) - one ledger line
+			k) Tier 11: Expand to B, F#, C#, Db, Gb, Cb - alto
+				(1) - no ledger lines
+				(2) - one ledger line
+			l) Tier 12: Expand to B, F#, C#, Db, Gb, Cb - tenor
+				(1) - no ledger lines
+				(2) - one ledger line
+			m) Tier 13: Expand to B, F#, C#, Db, Gb, Cb - all
+				(1) - no ledger lines
+				(2) - one ledger line
+				(3) - two ledger lines
+		2) Total of 27 levels
+		
+	b. Variables and Data Structures required (all in StatusModel):
+		1) Random Treble or Bass clef through Tier 6
+		2) Alternate Alto / Tenor clef Tiers 7 - 12
+		3) Random T/B/A/N for Tier 13
+		4) Alternate Ranges for notes:
+			a) no ledger lines for all odd-numbered levels 1 - 25
+			b) one ledger line for all even-numbered levels 2 - 26
+			c) two ledger lines for level 27
+		5) Scale Degrees 1 - 7 can be used randomly at any level
+			a) properties: numeric name, solfege name, technical name
+			b) correct match for each scale degree can be done easily by matching
+				letter name (noteSpec) with appropriate letter name of key
+				
+				-- Scenarios:
+					(1) Base: 
+						Key Signature: C Major
+						Note:	C
+						Scale Degree: 1 = do = tonic
+						NoteIndex: 0
+					
+					(2) Transpose:
+						Key Signature: D Major
+						Note:	C(#)
+						Scale Degree: 7 = ti = leading tone
+						NoteIndex: 0
+						
+					(3) Transpose:
+						Key Signature: Eb Major
+						Note: C
+						Scale Degree: 6 = la = submediant
+						NoteIndex: 0
+						
+			c) to get the circumflex to show above a number, use layers in CSS
